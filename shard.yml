@@ -1,0 +1,9 @@
+name: crystal-ptools
+version: 0.1.0
+
+authors:
+  - Daniel Berger <djberg96@gmail.com>
+
+crystal: 1.6.2
+
+license: MIT
