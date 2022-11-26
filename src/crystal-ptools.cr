@@ -1,18 +1,29 @@
 class File
   PTOOLS_VERSION = "0.1.0"
 
-  def self.jpg?(file : String) : Bool
-    bool = false
-
-    begin
-      bytes = Bytes.new(10)
-      fh = File.open(file)
-      fh.read(bytes)
-      bool = bytes.to_a == [255, 216, 255, 224, 0, 16, 74, 70, 73, 70]
-    ensure
-      fh.close if fh
+  # Read N bytes from path or filename. Returns a Bytes object.
+  #
+  def self.readn(filename : Path|String, nbytes : Int, encoding = nil, invalid = nil) : Bytes
+    return Bytes.empty unless nbytes > 0
+    open(filename, "r") do |file|
+      file.set_encoding(encoding, invalid: invalid) if encoding
+      bytes = Bytes.new(nbytes)
+      file.read(bytes)
+      bytes
     end
+  end
 
-    bool
+  # Is the file a bitmap file?
+  #
+  def self.bmp?(file : String) : Bool
+    str = File.readn(file, 6)
+    size = IO::Memory.new(str[2,4], writeable: false).read_bytes(Int32)
+    str[0,2].to_a == [66,77] && File.size(file) == size
+  end
+
+  # Is the file a jpeg file?
+  #
+  def self.jpg?(file : String) : Bool
+    File.readn(file, 10).hexstring == "ffd8ffe000104a464946"
   end
 end
