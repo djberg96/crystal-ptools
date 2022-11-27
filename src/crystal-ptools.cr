@@ -98,7 +98,6 @@ class File
       next if found.empty?
       found = found.first
 
-      # Convert all forward slashes to backslashes if supported
       if File.executable?(found) && !File.directory?(found)
         return found
       end

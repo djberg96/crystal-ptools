@@ -99,5 +99,13 @@ describe File do
     it "returns the expected result if an absolute path is binary is found" do
       File.which("/usr/local/bin/crystal").should eq("/usr/local/bin/crystal")
     end
+
+    it "returns nil if the binary isn't found" do
+      File.which("bogus").should be_nil
+    end
+
+    it "returns nil if the binary isn't found on the specified path" do
+      File.which("bogus", "/usr/local/bogus").should be_nil
+    end
   end
 end
