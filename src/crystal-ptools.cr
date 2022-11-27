@@ -32,4 +32,10 @@ class File
   def self.jpg?(file : String) : Bool
     File.readn(file, 10).hexstring == "ffd8ffe000104a464946"
   end
+
+  # Is the file a png file?
+  #
+  def self.png?(file)
+    File.readn(file, 4).hexstring == "89504e47"
+  end
 end

@@ -46,4 +46,18 @@ describe File do
       File.jpg?("spec/txt/empty.txt").should be_false
     end
   end
+
+  describe ".png?" do
+    it "returns the expected value for a png file" do
+      File.png?("spec/img/test.png").should be_true
+    end
+
+    it "returns the expected value for a non-png image file" do
+      File.png?("spec/img/test.gif").should be_false
+    end
+
+    it "returns the expected value for a non-image file" do
+      File.png?("spec/txt/empty.txt").should be_false
+    end
+  end
 end
