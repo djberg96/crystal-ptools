@@ -29,13 +29,28 @@ class File
 
   # Is the file a jpeg file?
   #
-  def self.jpg?(file : String) : Bool
+  def self.jpg?(file : String | Path) : Bool
     File.readn(file, 10).hexstring == "ffd8ffe000104a464946"
   end
 
   # Is the file a png file?
   #
-  def self.png?(file)
+  def self.png?(file : String | Path) : Bool
     File.readn(file, 4).hexstring == "89504e47"
+  end
+
+  # Is the file a tiff?
+  #
+  def self.tiff?(file : String | Path) : Bool
+    return false if File.size(file) < 12
+
+    bytes = File.readn(file, 4)
+    first_two_chars = String.new(bytes[0,2])
+
+    # II is Intel, MM is Motorola
+    return false if first_two_chars != "II" && first_two_chars != "MM"
+    return false if bytes.last != 42
+
+    true
   end
 end

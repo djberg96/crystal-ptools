@@ -60,4 +60,19 @@ describe File do
       File.png?("spec/txt/empty.txt").should be_false
     end
   end
+
+  describe ".tiff?" do
+    it "returns the expected value for a tiff file" do
+      File.tiff?("spec/img/test.tiff").should be_true
+    end
+
+    it "returns the expected value for a non-tiff image file" do
+      File.tiff?("spec/img/test.gif").should be_false
+      File.tiff?("spec/img/test.png").should be_false
+    end
+
+    it "returns the expected value for a non-image file" do
+      File.tiff?("spec/txt/empty.txt").should be_false
+    end
+  end
 end
