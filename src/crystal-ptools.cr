@@ -60,4 +60,50 @@ class File
     bytes = File.readn(file, 4)
     ["00000100", "00000200"].includes?(bytes[0,4].hexstring)
   end
+
+  # Looks for the first occurrence of +program+ within +path+.
+  #
+  # On Windows, it looks for executables ending with the suffixes defined
+  # in your PATHEXT environment variable, or '.exe', '.bat' and '.com' if
+  # that isn't defined, which you may optionally include in +program+.
+  #
+  # Returns nil if not found.
+  #
+  # Examples:
+  #
+  #   File.which('ruby') # => '/usr/local/bin/ruby'
+  #   File.which('foo')  # => nil
+  #
+  def self.which(program : String, paths : String|Path = ENV["PATH"])
+    paths = String.new(paths) if paths.is_a?(Path)
+    program = Path.new(program) if program.is_a?(String)
+
+    if program.absolute?
+      found = Dir[program].first
+
+      if found && File.executable?(found) && !File.directory?(found)
+        return found.to_s
+      else
+        return nil
+      end
+    end
+
+    paths.split(Process::PATH_DELIMITER).each do |dir|
+      dir = File.expand_path(dir)
+
+      next unless File.exists?(dir) # In case of bogus second argument
+
+      file = File.join(dir, program)
+      found = Dir[file]
+      next if found.empty?
+      found = found.first
+
+      # Convert all forward slashes to backslashes if supported
+      if File.executable?(found) && !File.directory?(found)
+        return found
+      end
+    end
+
+    nil
+  end
 end

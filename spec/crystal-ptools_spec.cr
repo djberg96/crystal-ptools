@@ -90,4 +90,14 @@ describe File do
       File.tiff?("spec/txt/empty.txt").should be_false
     end
   end
+
+  describe ".which" do
+    it "returns the expected result if the binary is found" do
+      File.which("crystal").should eq("/usr/local/bin/crystal")
+    end
+
+    it "returns the expected result if an absolute path is binary is found" do
+      File.which("/usr/local/bin/crystal").should eq("/usr/local/bin/crystal")
+    end
+  end
 end
