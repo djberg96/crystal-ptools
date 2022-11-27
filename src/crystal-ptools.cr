@@ -53,4 +53,11 @@ class File
 
     true
   end
+
+  # Is the file an ico file?
+  #
+  def self.ico?(file : String | Path) : Bool
+    bytes = File.readn(file, 4)
+    ["00000100", "00000200"].includes?(bytes[0,4].hexstring)
+  end
 end

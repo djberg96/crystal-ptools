@@ -29,6 +29,21 @@ describe File do
     end
   end
 
+  describe ".ico?" do
+    it "returns the expected value for a ico file" do
+      File.ico?("spec/img/test.ico").should be_true
+    end
+
+    it "returns the expected value for a non-ico image file" do
+      File.ico?("spec/img/test.bmp").should be_false
+      File.ico?("spec/img/test.png").should be_false
+    end
+
+    it "returns the expected value for a non-image file" do
+      File.ico?("spec/txt/empty.txt").should be_false
+    end
+  end
+
   describe ".jpg?" do
     it "returns the expected value for a jpeg file" do
       File.jpg?("spec/img/test.jpg").should be_true
