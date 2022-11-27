@@ -15,6 +15,20 @@ describe File do
     end
   end
 
+  describe ".gif?" do
+    it "returns the expected value for a gif image file" do
+      File.gif?("spec/img/test.gif").should be_true
+    end
+
+    it "returns the expected value for a non-bitmap image file" do
+      File.gif?("spec/img/test.jpg").should be_false
+    end
+
+    it "returns the expected value for a non-image file" do
+      File.gif?("spec/txt/empty.txt").should be_false
+    end
+  end
+
   describe ".jpg?" do
     it "returns the expected value for a jpeg file" do
       File.jpg?("spec/img/test.jpg").should be_true

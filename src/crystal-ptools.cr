@@ -21,6 +21,12 @@ class File
     str[0,2].to_a == [66,77] && File.size(file) == size
   end
 
+  # Is the file a gif?
+  #
+  def self.gif?(file)
+    %w[GIF89a GIF97a].includes?(String.new(File.readn(file, 6)))
+  end
+
   # Is the file a jpeg file?
   #
   def self.jpg?(file : String) : Bool
