@@ -1,5 +1,6 @@
 class File
   PTOOLS_VERSION = "0.1.0"
+  IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico .tiff]
 
   # Read N bytes from path or filename. Returns a Bytes object.
   #
@@ -59,6 +60,33 @@ class File
   def self.ico?(file : String | Path) : Bool
     bytes = File.readn(file, 4)
     ["00000100", "00000200"].includes?(bytes[0,4].hexstring)
+  end
+
+  # Returns whether or not the file is an image. Only JPEG, PNG, BMP,
+  # GIF, and ICO are checked against.
+  #
+  # This reads and checks the first few bytes of the file. For a version
+  # that is more robust, but which depends on a 3rd party C library (and is
+  # difficult to build on MS Windows), see the 'filemagic' library.
+  #
+  # By default the filename extension is also checked. You can disable this
+  # by passing false as the second argument, in which case only the contents
+  # are checked.
+  #
+  # Examples:
+  #
+  #    File.image?('somefile.jpg') # => true
+  #    File.image?('somefile.txt') # => false
+  #--
+  # The approach I used here is based on information found at
+  # http://en.wikipedia.org/wiki/Magic_number_(programming)
+  #
+  def self.image?(file, check_file_extension = true)
+    bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
+
+    bool &&= IMAGE_EXT.includes?(File.extname(file).downcase) if check_file_extension
+
+    bool
   end
 
   # Looks for the first occurrence of +program+ within +path+.

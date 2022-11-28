@@ -91,6 +91,20 @@ describe File do
     end
   end
 
+  describe ".image?" do
+    it "returns the expected value for an image file" do
+      File.image?("spec/img/test.tiff").should be_true
+      File.image?("spec/img/test.bmp").should be_true
+      File.image?("spec/img/test.gif").should be_true
+      File.image?("spec/img/test.png").should be_true
+      File.image?("spec/img/test.ico").should be_true
+    end
+
+    it "returns the expected value for a non-image file" do
+      File.image?("spec/txt/empty.txt").should be_false
+    end
+  end
+
   describe ".which" do
     it "returns the expected result if the binary is found" do
       expected = IO::Memory.new
