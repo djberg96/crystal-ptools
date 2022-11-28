@@ -89,6 +89,46 @@ class File
     bool
   end
 
+  # Returns an array of each +program+ within +path+, or nil if it cannot be found.
+  #
+  # Examples:
+  #
+  #   File.whereis('ruby') # => ['/usr/bin/ruby', '/usr/local/bin/ruby']
+  #   File.whereis('foo')  # => nil
+  #
+  def self.whereis(program : String|Path, path : String|Path = ENV["PATH"]) : Array(String) | Nil
+    program = Path.new(program) unless program.is_a?(Path)
+    path = String.new(path) if path.is_a?(Path)
+
+    # Bail out early if an absolute path is provided.
+    if program.absolute?
+      found = Dir[program].first?
+
+      if found && File.executable?(found) && !File.directory?(found)
+        return [found]
+      else
+        return nil
+      end
+    end
+
+    paths = Array(String).new
+
+    # Iterate over each path glob the dir + program.
+    path.split(Process::PATH_DELIMITER).each do |dir|
+      next unless File.exists?(dir) # In case of bogus second argument
+
+      file = File.join(dir, program)
+      found = Dir[file].first?
+
+      # Convert all forward slashes to backslashes if supported
+      if found && File.executable?(found) && !File.directory?(found)
+        paths << found
+      end
+    end
+
+    paths.empty? ? nil : paths.uniq
+  end
+
   # Looks for the first occurrence of +program+ within +path+.
   #
   # On Windows, it looks for executables ending with the suffixes defined

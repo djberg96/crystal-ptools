@@ -105,6 +105,29 @@ describe File do
     end
   end
 
+  describe ".whereis" do
+    it "returns the expected result if a binary is found" do
+      expected = IO::Memory.new
+      Process.run(command: "which", args: ["crystal"], output: expected, error: expected)
+      File.whereis("crystal").should eq([expected.to_s.chomp])
+    end
+
+    it "returns the expected result if an absolute path is used" do
+      expected = IO::Memory.new
+      Process.run(command: "which", args: ["crystal"], output: expected, error: expected)
+      program = expected.to_s.chomp
+      File.whereis(program).should eq([program])
+    end
+
+    it "returns nil if the binary isn't found" do
+      File.whereis("bogus").should be_nil
+    end
+
+    it "returns nil if the binary isn't found on the specified path" do
+      File.whereis("crystal", "/usr/local/bogus").should be_nil
+    end
+  end
+
   describe ".which" do
     it "returns the expected result if the binary is found" do
       expected = IO::Memory.new
@@ -112,7 +135,7 @@ describe File do
       File.which("crystal").should eq(expected.to_s.chomp)
     end
 
-    it "returns the expected result if an absolute path is binary is found" do
+    it "returns the expected result if an absolute path to binary is used and found" do
       expected = IO::Memory.new
       Process.run(command: "which", args: ["crystal"], output: expected, error: expected)
       program = expected.to_s.chomp
@@ -124,7 +147,7 @@ describe File do
     end
 
     it "returns nil if the binary isn't found on the specified path" do
-      File.which("bogus", "/usr/local/bogus").should be_nil
+      File.which("crystal", "/usr/local/bogus").should be_nil
     end
   end
 end
