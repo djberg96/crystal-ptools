@@ -1,6 +1,7 @@
 # crystal-ptools
 
-TODO: Write a description here
+This is a Crystal port of the "ptools" library originally written for Ruby.
+It contains additional singleton methods for the File class.
 
 ## Installation
 
@@ -18,9 +19,13 @@ TODO: Write a description here
 
 ```crystal
 require "crystal-ptools"
-```
 
-TODO: Write usage instructions here
+File.bmp?("/path/to/some_file.bmp") # Is the file a bitmap file?
+File.jpg?("/path/to/some_file.bmp") # Is the file a JPEG file?
+File.ico?("/path/to/some_file.bmp") # Is the file an ICO file?
+File.png?("/path/to/some_file.bmp") # Is the file a PNG file?
+File.tiff?("/path/to/some_file.bmp") # Is the file a TIFF file?
+```
 
 ## Development
 
@@ -36,4 +41,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Daniel Berger](https://github.com/your-github-user) - creator and maintainer
+- [Daniel Berger](https://github.com/djberg96) - creator and maintainer
