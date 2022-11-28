@@ -20,6 +20,11 @@ It contains additional singleton methods for the File class.
 ```crystal
 require "crystal-ptools"
 
+# Simulate the "which" command.
+File.which("crystal") # => "/opt/homebrew/bin/crystal"
+File.which("bogus")   # => nil
+
+# Test to see if a file is an image.
 File.bmp?("/path/to/some_file.bmp") # Is the file a bitmap file?
 File.jpg?("/path/to/some_file.bmp") # Is the file a JPEG file?
 File.ico?("/path/to/some_file.bmp") # Is the file an ICO file?
