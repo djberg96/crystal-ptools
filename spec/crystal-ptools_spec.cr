@@ -93,7 +93,9 @@ describe File do
 
   describe ".which" do
     it "returns the expected result if the binary is found" do
-      File.which("crystal").should eq("/usr/local/bin/crystal")
+      expected = IO::Memory.new
+      Process.run(command: "which", args: ["crystal"], output: expected, error: expected)
+      File.which("crystal").should eq(expected.to_s.chomp)
     end
 
     it "returns the expected result if an absolute path is binary is found" do
