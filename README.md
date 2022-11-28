@@ -10,7 +10,7 @@ It contains additional singleton methods for the File class.
    ```yaml
    dependencies:
      crystal-ptools:
-       github: your-github-user/crystal-ptools
+       github: djberg96/crystal-ptools
    ```
 
 2. Run `shards install`
@@ -29,11 +29,11 @@ File.tiff?("/path/to/some_file.bmp") # Is the file a TIFF file?
 
 ## Development
 
-TODO: Write development instructions here
+To run the specs, simply clone the repo and run `crystal spec`.
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/crystal-ptools/fork>)
+1. Fork it (<https://github.com/djberg96/crystal-ptools/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -42,3 +42,10 @@ TODO: Write development instructions here
 ## Contributors
 
 - [Daniel Berger](https://github.com/djberg96) - creator and maintainer
+
+## Copyright
+(C) 2022, Daniel J. Berger
+All Rights Reserved
+
+## Author
+Daniel J. Berger
