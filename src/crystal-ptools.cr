@@ -79,10 +79,10 @@ class File
     program = Path.new(program) if program.is_a?(String)
 
     if program.absolute?
-      found = Dir[program].first
+      found = Dir[program].first?
 
       if found && File.executable?(found) && !File.directory?(found)
-        return found.to_s
+        return found
       else
         return nil
       end
@@ -94,11 +94,9 @@ class File
       next unless File.exists?(dir) # In case of bogus second argument
 
       file = File.join(dir, program)
-      found = Dir[file]
-      next if found.empty?
-      found = found.first
+      found = Dir[file].first?
 
-      if File.executable?(found) && !File.directory?(found)
+      if found && File.executable?(found) && !File.directory?(found)
         return found
       end
     end
