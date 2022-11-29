@@ -16,7 +16,7 @@ class File
 
   # Is the file a bitmap file?
   #
-  def self.bmp?(file : String) : Bool
+  def self.bmp?(file : String|Path) : Bool
     str = File.readn(file, 6)
     size = IO::Memory.new(str[2,4], writeable: false).read_bytes(Int32)
     str[0,2].to_a == [66,77] && File.size(file) == size
@@ -24,25 +24,25 @@ class File
 
   # Is the file a gif?
   #
-  def self.gif?(file)
+  def self.gif?(file : String|Path) : Bool
     %w[GIF89a GIF97a].includes?(String.new(File.readn(file, 6)))
   end
 
   # Is the file a jpeg file?
   #
-  def self.jpg?(file : String | Path) : Bool
+  def self.jpg?(file : String|Path) : Bool
     File.readn(file, 10).hexstring == "ffd8ffe000104a464946"
   end
 
   # Is the file a png file?
   #
-  def self.png?(file : String | Path) : Bool
+  def self.png?(file : String|Path) : Bool
     File.readn(file, 4).hexstring == "89504e47"
   end
 
   # Is the file a tiff?
   #
-  def self.tiff?(file : String | Path) : Bool
+  def self.tiff?(file : String|Path) : Bool
     return false if File.size(file) < 12
 
     bytes = File.readn(file, 4)
@@ -57,7 +57,7 @@ class File
 
   # Is the file an ico file?
   #
-  def self.ico?(file : String | Path) : Bool
+  def self.ico?(file : String|Path) : Bool
     bytes = File.readn(file, 4)
     ["00000100", "00000200"].includes?(bytes[0,4].hexstring)
   end
@@ -81,7 +81,7 @@ class File
   # The approach I used here is based on information found at
   # http://en.wikipedia.org/wiki/Magic_number_(programming)
   #
-  def self.image?(file, check_file_extension = true)
+  def self.image?(file : Path|String, check_file_extension : Bool = true) : Bool
     bool = bmp?(file) || jpg?(file) || png?(file) || gif?(file) || tiff?(file) || ico?(file)
 
     bool &&= IMAGE_EXT.includes?(File.extname(file).downcase) if check_file_extension
@@ -96,7 +96,7 @@ class File
   #   File.whereis('ruby') # => ['/usr/bin/ruby', '/usr/local/bin/ruby']
   #   File.whereis('foo')  # => nil
   #
-  def self.whereis(program : String|Path, path : String|Path = ENV["PATH"]) : Array(String) | Nil
+  def self.whereis(program : String|Path, path : String|Path = ENV["PATH"]) : Array(String)|Nil
     program = Path.new(program) unless program.is_a?(Path)
     path = String.new(path) if path.is_a?(Path)
 
@@ -142,7 +142,7 @@ class File
   #   File.which('ruby') # => '/usr/local/bin/ruby'
   #   File.which('foo')  # => nil
   #
-  def self.which(program : String, paths : String|Path = ENV["PATH"])
+  def self.which(program : String|Path, paths : String|Path = ENV["PATH"]) : String|Nil
     paths = String.new(paths) if paths.is_a?(Path)
     program = Path.new(program) if program.is_a?(String)
 
