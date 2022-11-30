@@ -89,7 +89,7 @@ class File
     bool
   end
 
-  # Reads and returns an array of `num_lines` from `file`.
+  # Reads and returns an array of the first `num_lines` from `file`.
   #
   # Example:
   #
@@ -109,7 +109,9 @@ class File
     array
   end
 
-  # Returns an array of each +program+ within +path+, or nil if it cannot be found.
+  # Returns an array of each `program` within `path`, or nil if it cannot be found.
+  # If a `path` is provided, it should be a string delimited by `Process::PATH_DELIMITER`.
+  # By default your `ENV["PATH"]` is searched.
   #
   # Examples:
   #
