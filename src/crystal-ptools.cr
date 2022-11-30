@@ -109,6 +109,31 @@ class File
     array
   end
 
+  # Reads and returns an array of the last `num_lines` from `file`. Note that
+  # this does not implement `tail -f` behavior.
+  #
+  # Example:
+  #
+  #  File.tail("somefile.txt")    # => ["This is line 10", "This is line 9", ...]
+  #  File.tail("somefile.txt", 3) # => ["This is line 10", "This is line 9", "This is line 8"]
+  #
+  def self.tail(file : String|Path, num_lines : Int = 10, line_size : Int = 1024)
+    array = Array(String).new
+    return array if num_lines < 1
+
+    File.open(file) do |fh|
+      offset = num_lines * line_size
+      fh.seek(0 &- (fh.size < offset ? fh.size : offset), IO::Seek::End)
+      array = fh.gets_to_end.lines
+
+      if array.size > num_lines
+        array = array[array.size - num_lines..-1]
+      end
+    end
+
+    array
+  end
+
   # Returns an array of each `program` within `path`, or nil if it cannot be found.
   # If a `path` is provided, it should be a string delimited by `Process::PATH_DELIMITER`.
   # By default your `ENV["PATH"]` is searched.

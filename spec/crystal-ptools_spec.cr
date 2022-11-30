@@ -134,6 +134,35 @@ describe File do
     end
   end
 
+  describe ".tail" do
+    array = Array(String).new
+    25.times{ |n| array << "This is line #{n+1}" }
+
+    it "returns the expected result with a default size" do
+      with_file("basic_tail_file.txt") do |file|
+        File.tail(file).should eq(array[15..24])
+      end
+    end
+
+    it "returns the expected result with a specified size" do
+      with_file("basic_tail_file.txt") do |file|
+        File.tail(file, 5).should eq(array[20..24])
+      end
+    end
+
+    it "returns the expected result with a negative size" do
+      with_file("basic_tail_file.txt") do |file|
+        File.tail(file, -5).should eq(Array(String).new)
+      end
+    end
+
+    it "returns the expected result with a size larger than file" do
+      with_file("basic_tail_file.txt") do |file|
+        File.tail(file, 30).should eq(array)
+      end
+    end
+  end
+
   describe ".whereis" do
     it "returns the expected result if a binary is found" do
       expected = IO::Memory.new
