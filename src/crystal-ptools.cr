@@ -89,6 +89,26 @@ class File
     bool
   end
 
+  # Reads and returns an array of `num_lines` from `file`.
+  #
+  # Example:
+  #
+  #  File.head("somefile.txt")    # => ["This is line 1", "This is line 2", ...]
+  #  File.head("somefile.txt", 3) # => ["This is line 1", "This is line 2", "This is line 3"]
+  #
+  def self.head(file : String|Path, num_lines : Int = 10)
+    array = Array(String).new
+
+    File.each_line(file) do |line|
+      break if num_lines <= 0
+
+      num_lines -= 1
+      array << line
+    end
+
+    array
+  end
+
   # Returns an array of each +program+ within +path+, or nil if it cannot be found.
   #
   # Examples:
