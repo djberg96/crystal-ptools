@@ -2,6 +2,69 @@ class File
   PTOOLS_VERSION = "0.1.0"
   IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico .tiff]
 
+  # File::Info tweaks required for now while core devs debate compatability.
+
+  struct File::Info
+    def blksize
+      @stat.st_blksize
+    end
+
+    def blocks
+      @stat.st_blocks
+    end
+  end
+
+  # Returns whether or not +file+ is a binary non-image file, i.e. executable,
+  # shared object, ect. Note that this is NOT guaranteed to be 100% accurate.
+  # It performs a "best guess" based on a simple test of the first
+  # +File.blksize+ characters, or 4096, whichever is smaller.
+  #
+  # By default it will check to see if more than 30 percent of the characters
+  # are non-text characters. If so, the method returns true. You can configure
+  # this percentage by passing your own as a second argument.
+  #
+  # Example:
+  #
+  #   File.binary?('somefile.exe') # => true
+  #   File.binary?('somefile.txt') # => false
+  #
+  def self.binary?(file, percentage = 0.30)
+    bool = false
+    size = File.size(file)
+
+    return bool if size == 0
+    return bool if image?(file)
+    return bool if check_bom?(file)
+
+    num_bytes = File.info(file).blksize
+    num_bytes = 4096 if num_bytes > 4096
+    num_bytes = size if size < num_bytes
+
+    File.open(file) do |fh|
+      str = fh.read_string(num_bytes)
+      chars = String.new(str.encode("US-ASCII", :skip)).chars
+      p chars.size
+      p chars.select(' '..'~').size
+      bool = ((chars.size - chars.select(' '..'~').size) / chars.size.to_f) > percentage
+    end
+
+    bool
+  end
+
+  # Returns whether or not the given +text+ contains a BOM marker.
+  # If present, we can generally assume it's a text file.
+  #
+  def self.check_bom?(file)
+    bytes = File.readn(file, 4)
+
+    bool = false
+    bool = true if bytes == Bytes[239, 187, 191]
+    bool = true if bytes.in?(Bytes[0, 0, 254, 255], Bytes[0, 0, 254, 255])
+    bool = true if bytes.in?(Bytes[254, 255], Bytes[255, 254])
+
+    bool
+  end
+
   # Read N bytes from path or filename. Returns a Bytes object.
   #
   def self.readn(filename : Path|String, nbytes : Int, encoding = nil, invalid = nil) : Bytes

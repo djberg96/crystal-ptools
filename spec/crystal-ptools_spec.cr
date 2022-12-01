@@ -1,6 +1,15 @@
 require "./spec_helper"
 
 describe File do
+  describe "binary?" do
+    it "returns false for text files" do
+      #File.binary?("spec/txt/empty.txt").should be_false
+      #File.binary?("spec/txt/english.txt").should be_false
+      #File.binary?("spec/txt/english.utf16").should be_false
+      File.binary?("spec/txt/korean.txt").should be_false
+    end
+  end
+
   describe ".bmp?" do
     it "returns the expected value for a bitmap image file" do
       File.bmp?("spec/img/test.bmp").should be_true
