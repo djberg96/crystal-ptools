@@ -2,6 +2,71 @@ class File
   PTOOLS_VERSION = "0.1.0"
   IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico .tiff]
 
+  # File::Info tweaks required for now while core devs debate compatability.
+
+  struct File::Info
+    def blksize
+      @stat.st_blksize
+    end
+
+    def blocks
+      @stat.st_blocks
+    end
+  end
+
+  # Returns whether or not +file+ is a binary non-image file, i.e. executable,
+  # shared object, etc.
+  #
+  # It performs a best guess based on a simple test of the first `blksize`
+  # characters, or 4096, whichever is smaller. If it finds two consecutive zero
+  # characters, it is considered binary.
+  #
+  # Example:
+  #
+  #   ```crystal
+  #   File.binary?('somefile.exe') # => true
+  #   File.binary?('somefile.txt') # => false
+  #   ```
+  #
+  def self.binary?(file)
+    bool = false
+    size = File.size(file)
+
+    return bool if size == 0
+    return bool if image?(file)
+    return bool if check_bom?(file)
+
+    num_bytes = File.info(file).blksize
+    num_bytes = 4096 if num_bytes > 4096
+    num_bytes = size if size < num_bytes
+
+    File.open(file) do |fh|
+      bytes = fh.read_string(num_bytes).bytes
+      bytes.each_with_index do |b, n|
+        if b == 0 && bytes[n+1] == 0
+          bool = true
+          break
+        end
+      end
+    end
+
+    bool
+  end
+
+  # Returns whether or not the given +text+ contains a BOM marker.
+  # If present, we can generally assume it's a text file.
+  #
+  def self.check_bom?(file)
+    bytes = File.readn(file, 4)
+
+    bool = false
+    bool = true if bytes == Bytes[239, 187, 191]
+    bool = true if bytes.in?(Bytes[0, 0, 254, 255], Bytes[0, 0, 254, 255])
+    bool = true if bytes.in?(Bytes[254, 255], Bytes[255, 254])
+
+    bool
+  end
+
   # Read N bytes from path or filename. Returns a Bytes object.
   #
   def self.readn(filename : Path|String, nbytes : Int, encoding = nil, invalid = nil) : Bytes
