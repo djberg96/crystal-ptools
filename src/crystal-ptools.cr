@@ -28,7 +28,7 @@ class File
   #   File.binary?('somefile.txt') # => false
   #   ```
   #
-  def self.binary?(file)
+  def self.binary?(file : String|Path) : Bool
     bool = false
     size = File.size(file)
 
