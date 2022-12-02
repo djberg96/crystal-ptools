@@ -79,6 +79,9 @@ class File
     end
   end
 
+  # Returns a count for the given `filename`. By default it returns the word
+  # count, but you may also specify "chars", "bytes" or "lines" as an option.
+  #
   def self.wc(filename : Path|String, option : String = "words") : Int
     count = 0
 
@@ -91,6 +94,7 @@ class File
       when "bytes"
         count += line.bytes.size
       when "chars"
+        p line.chars
         count += line.chars.size
       end
     end

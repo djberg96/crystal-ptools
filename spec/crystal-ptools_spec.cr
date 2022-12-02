@@ -192,11 +192,11 @@ describe File do
     end
 
     it "returns the expected result for 'bytes'" do
-      File.wc("spec/txt/english.txt", "bytes").should eq(39)
+      File.wc("spec/txt/english.txt", "bytes").should eq(40)
     end
  
     it "returns the expected result for 'chars'" do
-      File.wc("spec/txt/english.txt", "chars").should eq(39)
+      File.wc("spec/txt/english.txt", "chars").should eq(40)
     end
   end
 
