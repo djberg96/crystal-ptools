@@ -3,10 +3,20 @@ require "./spec_helper"
 describe File do
   describe "binary?" do
     it "returns false for text files" do
-      #File.binary?("spec/txt/empty.txt").should be_false
-      #File.binary?("spec/txt/english.txt").should be_false
-      #File.binary?("spec/txt/english.utf16").should be_false
+      File.binary?("spec/txt/empty.txt").should be_false
+      File.binary?("spec/txt/english.txt").should be_false
+      File.binary?("spec/txt/english.utf16").should be_false
       File.binary?("spec/txt/korean.txt").should be_false
+    end
+
+    it "returns false for image files" do
+      File.binary?("spec/img/test.jpg").should be_false
+      File.binary?("spec/img/test.png").should be_false
+      File.binary?("spec/img/test.gif").should be_false
+    end
+
+    it "returns true for binary files" do
+      File.binary?("/bin/ls").should be_true
     end
   end
 

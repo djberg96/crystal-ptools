@@ -15,20 +15,20 @@ class File
   end
 
   # Returns whether or not +file+ is a binary non-image file, i.e. executable,
-  # shared object, ect. Note that this is NOT guaranteed to be 100% accurate.
-  # It performs a "best guess" based on a simple test of the first
-  # +File.blksize+ characters, or 4096, whichever is smaller.
+  # shared object, etc.
   #
-  # By default it will check to see if more than 30 percent of the characters
-  # are non-text characters. If so, the method returns true. You can configure
-  # this percentage by passing your own as a second argument.
+  # It performs a best guess based on a simple test of the first `blksize`
+  # characters, or 4096, whichever is smaller. If it finds two consecutive zero
+  # characters, it is considered binary.
   #
   # Example:
   #
+  #   ```crystal
   #   File.binary?('somefile.exe') # => true
   #   File.binary?('somefile.txt') # => false
+  #   ```
   #
-  def self.binary?(file, percentage = 0.30)
+  def self.binary?(file)
     bool = false
     size = File.size(file)
 
@@ -41,11 +41,13 @@ class File
     num_bytes = size if size < num_bytes
 
     File.open(file) do |fh|
-      str = fh.read_string(num_bytes)
-      chars = String.new(str.encode("US-ASCII", :skip)).chars
-      p chars.size
-      p chars.select(' '..'~').size
-      bool = ((chars.size - chars.select(' '..'~').size) / chars.size.to_f) > percentage
+      bytes = fh.read_string(num_bytes).bytes
+      bytes.each_with_index do |b, n|
+        if b == 0 && bytes[n+1] == 0
+          bool = true
+          break
+        end
+      end
     end
 
     bool
