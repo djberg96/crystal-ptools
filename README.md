@@ -20,23 +20,33 @@ It contains additional singleton methods for the File class.
 ```crystal
 require "crystal-ptools"
 
-# Simulate the "which" command.
+# Simulate the "which" command:
 File.which("crystal") # => "/opt/homebrew/bin/crystal"
 File.which("bogus")   # => nil
 
-# Simulate the "whereis" command (minus the man pages).
+# Simulate the "whereis" command (minus the man pages):
 File.whereis("crystal") # => ["/opt/homebrew/bin/crystal"]
 File.whereis("bogus")   # => []
 
-# Test to see if a file is an image.
+# Test to see if a file is an image:
 File.image?("/path/to/some_image.bmp") # Is the file an image
 
-# Or check for a specific type of image.
+# Or check for a specific type of image:
 File.bmp?("/path/to/some_file.bmp")   # Is the file a bitmap file?
 File.jpg?("/path/to/some_file.jpg")   # Is the file a JPEG file?
 File.ico?("/path/to/some_file.ico")   # Is the file an ICO file?
 File.png?("/path/to/some_file.png")   # Is the file a PNG file?
 File.tiff?("/path/to/some_file.tiff") # Is the file a TIFF file?
+
+# Test to see if a file is a binary file:
+File.binary?("/bin/ls") # true
+File.binary?("/path/to/some_file.jpg") # false
+
+# Simulate the "wc" command:
+File.wc("/path/to/some_file.txt", "words")
+File.wc("/path/to/some_file.txt", "chars")
+File.wc("/path/to/some_file.txt", "lines")
+File.wc("/path/to/some_file.txt", "bytes")
 ```
 
 ## Development
