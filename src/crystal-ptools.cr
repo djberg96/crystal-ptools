@@ -79,6 +79,25 @@ class File
     end
   end
 
+  def self.wc(filename : Path|String, option : String = "words") : Int
+    count = 0
+
+    File.each_line(filename, chomp: false) do |line|
+      case option
+      when "words"
+        count += line.split.size
+      when "lines"
+        count += 1
+      when "bytes"
+        count += line.bytes.size
+      when "chars"
+        count += line.chars.size
+      end
+    end
+
+    count
+  end
+
   # Is the file a bitmap file?
   #
   def self.bmp?(file : String|Path) : Bool
