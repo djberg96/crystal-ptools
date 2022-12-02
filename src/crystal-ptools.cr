@@ -94,7 +94,6 @@ class File
       when "bytes"
         count += line.bytes.size
       when "chars"
-        p line.chars
         count += line.chars.size
       end
     end
