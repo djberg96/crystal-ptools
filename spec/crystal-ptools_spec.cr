@@ -194,7 +194,7 @@ describe File do
     it "returns the expected result for 'bytes'" do
       File.wc("spec/txt/english.txt", "bytes").should eq(40)
     end
- 
+
     it "returns the expected result for 'chars'" do
       File.wc("spec/txt/english.txt", "chars").should eq(40)
     end
@@ -204,7 +204,9 @@ describe File do
     it "returns the expected result if a binary is found" do
       expected = IO::Memory.new
       Process.run(command: "which", args: ["crystal"], output: expected, error: expected)
-      File.whereis("crystal").should eq([expected.to_s.chomp])
+      result = File.whereis("crystal")
+      result.should_not be_nil
+      result.not_nil!.should contain(expected.to_s.chomp)
     end
 
     it "returns the expected result if an absolute path is used" do

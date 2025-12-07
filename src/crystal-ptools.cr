@@ -238,7 +238,7 @@ class File
     if program.absolute?
       found = Dir[program].first?
 
-      if found && File.executable?(found) && !File.directory?(found)
+      if found && File::Info.executable?(found) && !File.directory?(found)
         return [found]
       else
         return nil
@@ -255,7 +255,7 @@ class File
       found = Dir[file].first?
 
       # Convert all forward slashes to backslashes if supported
-      if found && File.executable?(found) && !File.directory?(found)
+      if found && File::Info.executable?(found) && !File.directory?(found)
         paths << found
       end
     end
@@ -283,7 +283,7 @@ class File
     if program.absolute?
       found = Dir[program].first?
 
-      if found && File.executable?(found) && !File.directory?(found)
+      if found && File::Info.executable?(found) && !File.directory?(found)
         return found
       else
         return nil
@@ -298,7 +298,7 @@ class File
       file = File.join(dir, program)
       found = Dir[file].first?
 
-      if found && File.executable?(found) && !File.directory?(found)
+      if found && File::Info.executable?(found) && !File.directory?(found)
         return found
       end
     end
