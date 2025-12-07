@@ -1,5 +1,5 @@
 class File
-  PTOOLS_VERSION = "0.1.0"
+  PTOOLS_VERSION = "0.1.1"
   IMAGE_EXT = %w[.bmp .gif .jpg .jpeg .png .ico .tiff]
 
   # File::Info tweaks required for now while core devs debate compatability.
