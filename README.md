@@ -66,7 +66,7 @@ To run the specs, simply clone the repo and run `crystal spec`.
 - [Daniel Berger](https://github.com/djberg96) - creator and maintainer
 
 ## Copyright
-(C) 2022, Daniel J. Berger
+(C) 2022-2025, Daniel J. Berger
 All Rights Reserved
 
 ## Author
