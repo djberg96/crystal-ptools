@@ -1,9 +1,12 @@
 name: crystal-ptools
-version: 0.1.0
+version: 0.1.1
+description: Extra methods for the File class based on Unix command line tools
 
 authors:
   - Daniel Berger <djberg96@gmail.com>
 
-crystal: 1.6.2
+repository: https://github.com:djberg96/crystal-ptools
+
+crystal: ">= 1.6.2"
 
 license: MIT
