@@ -1,5 +1,5 @@
-name: crystal-ptools
-version: 0.1.1
+name: ptools
+version: 0.2.0
 description: Extra methods for the File class based on Unix command line tools
 
 authors:
@@ -7,6 +7,6 @@ authors:
 
 repository: https://github.com:djberg96/crystal-ptools
 
-crystal: ">= 1.6.2"
+crystal: ">= 1.1.0"
 
 license: MIT

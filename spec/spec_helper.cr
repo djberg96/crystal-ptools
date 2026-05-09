@@ -1,5 +1,5 @@
 require "spec"
-require "../src/crystal-ptools"
+require "../src/ptools"
 
 def with_file(file, size = 25)
   begin
