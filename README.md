@@ -9,7 +9,7 @@ It contains additional singleton methods for the File class.
 
    ```yaml
    dependencies:
-     crystal-ptools:
+     ptools:
        github: djberg96/crystal-ptools
    ```
 
@@ -18,7 +18,7 @@ It contains additional singleton methods for the File class.
 ## Usage
 
 ```crystal
-require "crystal-ptools"
+require "ptools"
 
 # Simulate the "which" command:
 File.which("crystal") # => "/opt/homebrew/bin/crystal"
